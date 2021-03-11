@@ -15,7 +15,7 @@ function InventoryController:Start()
 
         local player = game.Players.LocalPlayer
 
-        player.CharacterAdded:Wait()
+        repeat wait() until player.Character
 
         local InventoryScreen = player.PlayerGui["Inventory 2.0"]
         local Inventory = InventoryScreen["Overall Frame"].Inventoryframe.Inventory
@@ -23,10 +23,7 @@ function InventoryController:Start()
         
         for index, item in pairs(inventory) do
 
-            local NewInvItem = defaultitem:Clone()
-            NewInvItem.Parent = Inventory
-
-            InventoryModule.CreateItem(item, NewInvItem)
+            InventoryModule.CreateItem(item, player)
         
         end
 	

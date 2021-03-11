@@ -27,13 +27,20 @@ CreateItemModule.Items = {
 
 }
 
-CreateItemModule.CreateItem = function(item, ItemGui)
+CreateItemModule.CreateItem = function(item, player)
+
+    local InventoryScreen = player.PlayerGui["Inventory 2.0"]
+        local Inventory = InventoryScreen["Overall Frame"].Inventoryframe.Inventory
+        local defaultitem = Inventory.Itemframe
 
     for invname, info in pairs(CreateItemModule.Items) do
 
         if item == invname then
 
             print("Name: "..info.Name.." Damage: "..info.Damage.." Desc: "..info.Desc)
+
+            local NewInvItem = defaultitem:Clone()
+            NewInvItem.Parent = Inventory
 
         end
 
