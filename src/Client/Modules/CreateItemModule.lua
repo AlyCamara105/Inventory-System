@@ -38,32 +38,40 @@ function CreateItemModule:GuiEvents(ItemGui)
 
     local VPCamera = ItemGui.Camera
 
-    local goal = {}
-    goal.CFrame = VPCamera.CFrame * CFrame.Angles(0,0,math.pi)
-
-    local tweeninfo = TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, math.huge)
-
-    local tween = TweenService:Create(VPCamera, tweeninfo, goal)
+    local defaultCframe = VPCamera.CFrame
 
     ItemGui.MouseEnter:Connect(function()
+
+        local goal = {}
+        goal.CFrame = VPCamera.CFrame * CFrame.Angles(0,0,math.pi)
+
+        local tweeninfo = TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, math.huge)
+
+        local tween = TweenService:Create(VPCamera, tweeninfo, goal)
         
         Equipbutton.Visible = true
         Deletebutton.Visible = true
         Unequippedbutton.Visible = true
         Stats.Visible = true
-        
         tween:Play()
 
     end)
 
     ItemGui.MouseLeave:Connect(function()
+
+        local goal2 = {}
+        goal2.CFrame = defaultCframe
+
+        local tweeninfo2 = TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+
+        local tween2 = TweenService:Create(VPCamera, tweeninfo2, goal2)
         
         Equipbutton.Visible = false
         Deletebutton.Visible = false
         Unequippedbutton.Visible = false
         Stats.Visible = false
 
-        tween:Cancel()
+        tween2:Play()
 
     end)
 
