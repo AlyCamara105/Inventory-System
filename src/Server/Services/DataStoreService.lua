@@ -18,7 +18,7 @@ game.Players.PlayerAdded:Connect(function(player)
 
     local InventoryData = DataStore2("Inventory", player)
 
-    local DefaultInventory = {"one"}
+    local DefaultInventory = {"StarterSword"}
 	
     local playerInventory = InventoryData:Get(DefaultInventory)
 	
