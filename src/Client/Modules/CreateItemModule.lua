@@ -38,19 +38,12 @@ function CreateItemModule:GuiEvents(ItemGui)
 
     local VPCamera = ItemGui.Camera
 
-    local defaultcframe = VPCamera.CFrame
-
     local goal = {}
     goal.CFrame = VPCamera.CFrame * CFrame.Angles(0,0,math.pi)
-
-    local goal2 = {}
-    goal.CFrame = defaultcframe
 
     local tweeninfo = TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, math.huge)
 
     local tween = TweenService:Create(VPCamera, tweeninfo, goal)
-
-    local tween2 = TweenService:Create(VPCamera, tweeninfo, goal2)
 
     ItemGui.MouseEnter:Connect(function()
         
@@ -70,7 +63,7 @@ function CreateItemModule:GuiEvents(ItemGui)
         Unequippedbutton.Visible = false
         Stats.Visible = false
 
-
+        tween:Cancel()
 
     end)
 
