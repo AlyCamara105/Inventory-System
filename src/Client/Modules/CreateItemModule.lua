@@ -26,6 +26,34 @@ CreateItemModule.Items = {
 
 }
 
+function CreateItemModule:GuiEvents(ItemGui)
+
+    local VP = ItemGui.ViewportFrame
+    local Equipbutton = ItemGui.Equip
+    local Deletebutton = ItemGui.Delete
+    local Unequippedbutton = ItemGui.Unequip
+    local Stats = ItemGui.Stats
+
+    ItemGui.MouseEnter:Connect(function()
+        
+        Equipbutton.Visible = true
+        Deletebutton.Visible = true
+        Unequippedbutton.Visible = true
+        Stats.Visible = true
+
+    end)
+
+    ItemGui.MouseLeave:Connect(function()
+        
+        Equipbutton.Visible = false
+        Deletebutton.Visible = false
+        Unequippedbutton.Visible = false
+        Stats.Visible = false
+
+    end)
+
+end
+
 function CreateItemModule:LoadInventory(item, player)
 
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -57,7 +85,7 @@ function CreateItemModule:LoadInventory(item, player)
                     local VPSword = sword:Clone()
                     VPSword.Position = Vector3.new(0, 0, 0)
                     VPSword.Parent = VP
-                    
+                    CreateItemModule:GuiEvents(NewInvItem)
                 end
 
             end

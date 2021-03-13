@@ -6,7 +6,6 @@
 
 local InventoryController = {}
 
-
 function InventoryController:Start()
 
     local InventoryModule = self.Modules.CreateItemModule
