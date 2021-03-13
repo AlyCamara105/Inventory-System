@@ -24,10 +24,9 @@ CreateItemModule.Items = {
 
     }
 
-
 }
 
-CreateItemModule.CreateItem = function(item, player)
+function CreateItemModule:LoadInventory(item, player)
 
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local Swords = ReplicatedStorage:WaitForChild("Swords", 3):GetChildren()
@@ -68,6 +67,5 @@ CreateItemModule.CreateItem = function(item, player)
     end
 
 end
-
 
 return CreateItemModule
