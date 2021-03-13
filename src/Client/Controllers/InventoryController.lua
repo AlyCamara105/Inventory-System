@@ -23,7 +23,7 @@ function InventoryController:Start()
         
         for index, item in pairs(inventory) do
 
-            InventoryModule.CreateItem(item, player)
+            InventoryModule:LoadInventory(item, player)
         
         end
 	

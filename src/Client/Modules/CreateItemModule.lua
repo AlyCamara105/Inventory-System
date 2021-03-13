@@ -57,7 +57,7 @@ function CreateItemModule:LoadInventory(item, player)
                     local VPSword = sword:Clone()
                     VPSword.Position = Vector3.new(0, 0, 0)
                     VPSword.Parent = VP
-
+                    
                 end
 
             end
