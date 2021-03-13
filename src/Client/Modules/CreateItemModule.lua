@@ -28,6 +28,16 @@ CreateItemModule.Items = {
 
 }
 
+local openedItemGui = nil
+
+function CreateItemModule:GetopenedItemGui()
+    return openedItemGui
+end
+
+function CreateItemModule:SetopenedItemGui(ItemGui)
+    print(ItemGui.Name)
+end
+
 function CreateItemModule:GuiEvents(ItemGui)
 
     local VP = ItemGui.ViewportFrame
