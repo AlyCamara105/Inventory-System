@@ -6,6 +6,8 @@
 
 local CreateItemModule = {}
 
+local TweenService = game:GetService("TweenService")
+
 CreateItemModule.Items = {
 
     ["StarterSword"] = {
@@ -34,12 +36,30 @@ function CreateItemModule:GuiEvents(ItemGui)
     local Unequippedbutton = ItemGui.Unequip
     local Stats = ItemGui.Stats
 
+    local VPCamera = ItemGui.Camera
+
+    local defaultcframe = VPCamera.CFrame
+
+    local goal = {}
+    goal.CFrame = VPCamera.CFrame * CFrame.Angles(0,0,math.pi)
+
+    local goal2 = {}
+    goal.CFrame = defaultcframe
+
+    local tweeninfo = TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, math.huge)
+
+    local tween = TweenService:Create(VPCamera, tweeninfo, goal)
+
+    local tween2 = TweenService:Create(VPCamera, tweeninfo, goal2)
+
     ItemGui.MouseEnter:Connect(function()
         
         Equipbutton.Visible = true
         Deletebutton.Visible = true
         Unequippedbutton.Visible = true
         Stats.Visible = true
+        
+        tween:Play()
 
     end)
 
@@ -49,6 +69,8 @@ function CreateItemModule:GuiEvents(ItemGui)
         Deletebutton.Visible = false
         Unequippedbutton.Visible = false
         Stats.Visible = false
+
+
 
     end)
 
@@ -85,6 +107,7 @@ function CreateItemModule:LoadInventory(item, player)
                     local VPSword = sword:Clone()
                     VPSword.Position = Vector3.new(0, 0, 0)
                     VPSword.Parent = VP
+                    VPCamera.CFrame = CFrame.new(Vector3.new(0,0,-7), VPSword.Position)
                     CreateItemModule:GuiEvents(NewInvItem)
                 end
 
