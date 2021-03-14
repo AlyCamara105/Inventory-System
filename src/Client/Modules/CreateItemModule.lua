@@ -6,6 +6,8 @@
 
 local CreateItemModule = {}
 
+CreateItemModule.__index = CreateItemModule
+
 local TweenService = game:GetService("TweenService")
 
 CreateItemModule.Items = {
@@ -28,71 +30,75 @@ CreateItemModule.Items = {
 
 }
 
-local openedItemGui = nil
+CreateItemModule.openedItemGui = nil
 
 function CreateItemModule:GetopenedItemGui()
-    return openedItemGui
+    return self.openedItemGui
 end
 
 function CreateItemModule:SetopenedItemGui(ItemGui)
-    local openedItemGui = ItemGui
+    self.openedItemGui = ItemGui
     print(ItemGui.Name.."Has just been opened")
 end
 
 function CreateItemModule:GuiEvents(ItemGui)
+    local GuiEvents = setmetatable({}, CreateItemModule)
+    
+    GuiEvents.Itemopened = false
+    GuiEvents.VP = ItemGui.ViewportFrame
+    GuiEvents.Equipbutton = ItemGui.Equip
+    GuiEvents.Deletebutton = ItemGui.Delete
+    GuiEvents.Unequippedbutton = ItemGui.Unequip
+    GuiEvents.Stats = ItemGui.Stats
+    GuiEvents.VPCamera = ItemGui.Camera
+    GuiEvents.defaultcframe = GuiEvents.VPCamera.CFrame
 
-    local Itemopened = false
+    function GuiEvents:GetGuiOpened()
 
-    function CreateItemModule.GuiEvents:GetGuiOpened()
         print("We are checking if the item was clicked")
-        return Itemopened  
+        print(self.Itemopened)
+        return self.Itemopened
+
     end
 
-    function CreateItemModule.GuiEvents:SetopenedItemGui(bool)
-        Itemopened = bool
+    function GuiEvents:SetGuiOpened(bool)
+
+        self.Itemopened = bool
+        print(self.Itemopened)
         print("The item was clicked!")
+
     end
-
-    local VP = ItemGui.ViewportFrame
-    local Equipbutton = ItemGui.Equip
-    local Deletebutton = ItemGui.Delete
-    local Unequippedbutton = ItemGui.Unequip
-    local Stats = ItemGui.Stats
-
-    local VPCamera = ItemGui.Camera
-
-    local defaultCframe = VPCamera.CFrame
 
     ItemGui.MouseEnter:Connect(function()
-
+    
         local goal = {}
-        goal.CFrame = VPCamera.CFrame * CFrame.Angles(0,0,math.pi)
+        goal.CFrame = GuiEvents.VPCamera.CFrame * CFrame.Angles(0,0,math.pi)
 
         local tweeninfo = TweenInfo.new(5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, math.huge)
 
-        local tween = TweenService:Create(VPCamera, tweeninfo, goal)
+        local tween = TweenService:Create(GuiEvents.VPCamera, tweeninfo, goal)
         
-        Stats.Visible = true
+        GuiEvents.Stats.Visible = true
         tween:Play()
-
+    
     end)
-
+    
     ItemGui.MouseLeave:Connect(function()
 
         local goal2 = {}
-        goal2.CFrame = defaultCframe
+        goal2.CFrame = GuiEvents.defaultcframe
 
         local tweeninfo2 = TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
 
-        local tween2 = TweenService:Create(VPCamera, tweeninfo2, goal2)
+        local tween2 = TweenService:Create(GuiEvents.VPCamera, tweeninfo2, goal2)
 
-        if CreateItemModule.GuiEvents:GetopenedItemGui() == true then
+        if GuiEvents:GetGuiOpened() == true then
 
             print("Don't close the stats frame")
 
         else
 
-            Stats.Visible = false
+            GuiEvents.Stats.Visible = false
             print("We closed the stats frame because the itemgui wasn't clicked")
 
         end
@@ -114,25 +120,30 @@ function CreateItemModule:GuiEvents(ItemGui)
                 OtherItemGui.Stats.Visible = false
 
                 CreateItemModule:SetopenedItemGui(ItemGui)
+                print("This gui should close when clicked again")
 
             else
 
                 CreateItemModule:SetopenedItemGui(ItemGui)
+                print("There is no item gui clicked yet...")
 
             end
 
-            CreateItemModule.GuiEvents:SetopenedItemGui(true)
+            -- This part makes it so that when the same item gui is selected it doesn't go invisible. Change by moving it.
+            GuiEvents:SetGuiOpened(true)
 
-            Equipbutton.Visible = true
-            Unequippedbutton.Visible = true
-            Deletebutton.Visible = true
+            GuiEvents.Equipbutton.Visible = true
+            GuiEvents.Unequippedbutton.Visible = true
+            GuiEvents.Deletebutton.Visible = true
+            -- This is where it ends.
         
         end
     
     end)
 
+    return GuiEvents
 end
-
+local loop = 1
 function CreateItemModule:LoadInventory(item, player)
 
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -148,6 +159,7 @@ function CreateItemModule:LoadInventory(item, player)
 
             local NewInvItem = defaultitem:Clone()
             NewInvItem.Parent = Inventory
+            NewInvItem.Name = NewInvItem.Name..loop
 
             local VP = NewInvItem.ViewportFrame
 
@@ -166,6 +178,7 @@ function CreateItemModule:LoadInventory(item, player)
                     VPSword.Parent = VP
                     VPCamera.CFrame = CFrame.new(Vector3.new(0,0,-7), VPSword.Position)
                     CreateItemModule:GuiEvents(NewInvItem)
+                    loop = loop + 1
                 end
 
             end
