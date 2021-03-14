@@ -56,8 +56,10 @@ function CreateItemModule:GuiEvents(ItemGui)
     GuiEvents.Deletebutton = ItemGui.Delete
     GuiEvents.Unequippedbutton = ItemGui.Unequip
     GuiEvents.Stats = ItemGui.Stats
+    GuiEvents.StatsDamage = GuiEvents.Stats.Damage
     GuiEvents.VPCamera = ItemGui.Camera
     GuiEvents.defaultcframe = GuiEvents.VPCamera.CFrame
+    GuiEvents.Equipped = false
 
     function GuiEvents:GetGuiOpened()
 
@@ -70,6 +72,18 @@ function CreateItemModule:GuiEvents(ItemGui)
 
         self.Itemopened = bool
         print(self.ItemGui.Name.."was changed to: "..tostring(self.Itemopened))
+
+    end
+
+    function GuiEvents:GetEquipped()
+
+        return self.Equipped
+
+    end
+
+    function Gui:SetEquipped(bool)
+
+        self.Equipped = bool
 
     end
 
@@ -118,6 +132,12 @@ function CreateItemModule:GuiEvents(ItemGui)
             if CreateItemModule:GetopenedItemGui() ~= nil then
 
                 if CreateItemModule:GetopenedItemGui() == GuiEvents then
+
+                    if GuiEvents:GetEquipped() == true then
+
+                        --Make the Equip button invisible. Try to make the Equipbutton and stuff in a grid order and you chaneg the order accordingly
+
+                    end
 
                     GuiEvents.Equipbutton.Visible = false
                     GuiEvents.Unequippedbutton.Visible = false
@@ -186,6 +206,15 @@ function CreateItemModule:LoadInventory(item, player)
 
             local NewInvItem = defaultitem:Clone()
             NewInvItem.Parent = Inventory
+
+            local StatsName = NewInvItem.Stats.SwordName
+            local StatsDamage = NewInvItem.Stats.Damage
+            local StatsDesc = NewInvItem.Stats.Desc
+
+            StatsName.Text = info.Name
+            StatsDamage.Text = "Damage: "..info.Damage
+            StatsDesc.Text = "Desc: "..info.Desc
+
             NewInvItem.Name = NewInvItem.Name..loop
 
             local VP = NewInvItem.ViewportFrame
