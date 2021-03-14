@@ -35,10 +35,23 @@ function CreateItemModule:GetopenedItemGui()
 end
 
 function CreateItemModule:SetopenedItemGui(ItemGui)
-    print(ItemGui.Name)
+    local openedItemGui = ItemGui
+    print(ItemGui.Name.."Has just been opened")
 end
 
 function CreateItemModule:GuiEvents(ItemGui)
+
+    local Itemopened = false
+
+    function CreateItemModule.GuiEvents:GetGuiOpened()
+        print("We are checking if the item was clicked")
+        return Itemopened  
+    end
+
+    function CreateItemModule.GuiEvents:SetopenedItemGui(bool)
+        Itemopened = bool
+        print("The item was clicked!")
+    end
 
     local VP = ItemGui.ViewportFrame
     local Equipbutton = ItemGui.Equip
@@ -59,9 +72,6 @@ function CreateItemModule:GuiEvents(ItemGui)
 
         local tween = TweenService:Create(VPCamera, tweeninfo, goal)
         
-        Equipbutton.Visible = true
-        Deletebutton.Visible = true
-        Unequippedbutton.Visible = true
         Stats.Visible = true
         tween:Play()
 
@@ -75,14 +85,50 @@ function CreateItemModule:GuiEvents(ItemGui)
         local tweeninfo2 = TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
 
         local tween2 = TweenService:Create(VPCamera, tweeninfo2, goal2)
-        
-        Equipbutton.Visible = false
-        Deletebutton.Visible = false
-        Unequippedbutton.Visible = false
-        Stats.Visible = false
+
+        if CreateItemModule.GuiEvents:GetopenedItemGui() == true then
+
+            print("Don't close the stats frame")
+
+        else
+
+            Stats.Visible = false
+            print("We closed the stats frame because the itemgui wasn't clicked")
+
+        end
 
         tween2:Play()
 
+    end)
+
+    ItemGui.InputBegan:Connect(function(input)
+    
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+
+            if CreateItemModule:GetopenedItemGui() ~= nil then 
+
+                local OtherItemGui = CreateItemModule:GetopenedItemGui()
+                OtherItemGui.Equip.Visible = false
+                OtherItemGui.Unequip.Visible = false
+                OtherItemGui.Delete.Visible = false
+                OtherItemGui.Stats.Visible = false
+
+                CreateItemModule:SetopenedItemGui(ItemGui)
+
+            else
+
+                CreateItemModule:SetopenedItemGui(ItemGui)
+
+            end
+
+            CreateItemModule.GuiEvents:SetopenedItemGui(true)
+
+            Equipbutton.Visible = true
+            Unequippedbutton.Visible = true
+            Deletebutton.Visible = true
+        
+        end
+    
     end)
 
 end
