@@ -38,12 +38,18 @@ end
 
 function CreateItemModule:SetopenedItemGui(ItemGui)
     self.openedItemGui = ItemGui
-    print(ItemGui.Name.."Has just been opened")
+    if self.openedItemGui ~= nil then
+
+        print(ItemGui.ItemGui.Name.."Has just been opened")
+
+    end
+    
 end
 
 function CreateItemModule:GuiEvents(ItemGui)
     local GuiEvents = setmetatable({}, CreateItemModule)
-    
+
+    GuiEvents.ItemGui = ItemGui
     GuiEvents.Itemopened = false
     GuiEvents.VP = ItemGui.ViewportFrame
     GuiEvents.Equipbutton = ItemGui.Equip
@@ -55,8 +61,7 @@ function CreateItemModule:GuiEvents(ItemGui)
 
     function GuiEvents:GetGuiOpened()
 
-        print("We are checking if the item was clicked")
-        print(self.Itemopened)
+        print(self.ItemGui.Name.."is opened: "..tostring(self.Itemopened))
         return self.Itemopened
 
     end
@@ -64,8 +69,7 @@ function CreateItemModule:GuiEvents(ItemGui)
     function GuiEvents:SetGuiOpened(bool)
 
         self.Itemopened = bool
-        print(self.Itemopened)
-        print("The item was clicked!")
+        print(self.ItemGui.Name.."was changed to: "..tostring(self.Itemopened))
 
     end
 
@@ -111,31 +115,54 @@ function CreateItemModule:GuiEvents(ItemGui)
     
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
 
-            if CreateItemModule:GetopenedItemGui() ~= nil then 
+            if CreateItemModule:GetopenedItemGui() ~= nil then
 
-                local OtherItemGui = CreateItemModule:GetopenedItemGui()
-                OtherItemGui.Equip.Visible = false
-                OtherItemGui.Unequip.Visible = false
-                OtherItemGui.Delete.Visible = false
-                OtherItemGui.Stats.Visible = false
+                if CreateItemModule:GetopenedItemGui() == GuiEvents then
 
-                CreateItemModule:SetopenedItemGui(ItemGui)
-                print("This gui should close when clicked again")
+                    GuiEvents.Equipbutton.Visible = false
+                    GuiEvents.Unequippedbutton.Visible = false
+                    GuiEvents.Deletebutton.Visible = false
+                    GuiEvents.Stats.Visible = false
 
-            else
+                    CreateItemModule:SetopenedItemGui(nil)
+                    GuiEvents:SetGuiOpened(false)
 
-                CreateItemModule:SetopenedItemGui(ItemGui)
-                print("There is no item gui clicked yet...")
+                    print("This gui should close")
+
+                elseif CreateItemModule:GetopenedItemGui() ~= GuiEvents then
+
+                    local OtherItemGui = CreateItemModule:GetopenedItemGui()
+                    OtherItemGui.Equipbutton.Visible = false
+                    OtherItemGui.Unequippedbutton.Visible = false
+                    OtherItemGui.Deletebutton.Visible = false
+                    OtherItemGui.Stats.Visible = false
+                    OtherItemGui:SetGuiOpened(false)
+
+                    CreateItemModule:SetopenedItemGui(GuiEvents)
+                    
+                    GuiEvents:SetGuiOpened(true)
+
+                    GuiEvents.Equipbutton.Visible = true
+                    GuiEvents.Unequippedbutton.Visible = true
+                    GuiEvents.Deletebutton.Visible = true
+
+                    print(GuiEvents.ItemGui.Name.." was opened when "..OtherItemGui.ItemGui.Name.." was")
+
+                end 
+
+            elseif CreateItemModule:GetopenedItemGui() == nil then
+
+                CreateItemModule:SetopenedItemGui(GuiEvents)
+                
+                GuiEvents:SetGuiOpened(true)
+
+                GuiEvents.Equipbutton.Visible = true
+                GuiEvents.Unequippedbutton.Visible = true
+                GuiEvents.Deletebutton.Visible = true
+
+                print(GuiEvents.ItemGui.Name.." opened when none was opened")
 
             end
-
-            -- This part makes it so that when the same item gui is selected it doesn't go invisible. Change by moving it.
-            GuiEvents:SetGuiOpened(true)
-
-            GuiEvents.Equipbutton.Visible = true
-            GuiEvents.Unequippedbutton.Visible = true
-            GuiEvents.Deletebutton.Visible = true
-            -- This is where it ends.
         
         end
     
