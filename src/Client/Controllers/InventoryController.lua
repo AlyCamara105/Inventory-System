@@ -8,7 +8,7 @@ local InventoryController = {}
 
 function InventoryController:Start()
 
-    local InventoryModule = self.Modules.CreateItemModule
+    local InventoryModule = self.Modules.Inventory
 
     self.Services.DataStoreService.SendInv:Connect(function(inventory)
 
@@ -22,7 +22,7 @@ function InventoryController:Start()
         
         for index, item in pairs(inventory) do
 
-            InventoryModule:LoadInventory(item, player)
+            InventoryModule:LoadItem(item, player)
         
         end
 	
