@@ -197,12 +197,7 @@ function Inventory:GuiEvents(ItemGui)
                     GuiEvents.Equipbutton.TextLabel.Text = "Equip"
                     GuiEvents:SetEquipped(false)
                     Inventory:SetEquippedItem(nil)
-        
-                elseif GuiEvents:GetEquipped() == false then
-        
-                    GuiEvents.Equipbutton.TextLabel.Text = "Unequip"
-                    GuiEvents:SetEquipped(true)
-                    Inventory:SetEquippedItem(GuiEvents)
+                    print(GuiEvents.ItemGui.Name.." Just Unequiped the Item.")
         
                 end
 
@@ -215,6 +210,7 @@ function Inventory:GuiEvents(ItemGui)
                 GuiEvents.Equipbutton.TextLabel.Text = "Unequip"
                 GuiEvents:SetEquipped(true)
                 Inventory:SetEquippedItem(GuiEvents)
+                print(GuiEvents.ItemGui.Name.." Just Equiped the Item. Another Item was equipped.")
         
             end
 
@@ -223,6 +219,7 @@ function Inventory:GuiEvents(ItemGui)
             GuiEvents.Equipbutton.TextLabel.Text = "Unequip"
             GuiEvents:SetEquipped(true)
             Inventory:SetEquippedItem(GuiEvents)
+            print(GuiEvents.ItemGui.Name.." Just Equiped the Item. No ther Item was equipped.")
 
         end
     
