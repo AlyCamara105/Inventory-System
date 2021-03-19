@@ -6,6 +6,8 @@
 
 local Inventory = {}
 
+local EquipmentModule = Inventory.Modules.EquipmentClass
+
 Inventory.__index = Inventory
 
 local TweenService = game:GetService("TweenService")
@@ -59,7 +61,7 @@ function Inventory:SetopenedItemGui(ItemGui)
     
 end
 
-function Inventory:GuiEvents(ItemGui)
+function Inventory:GuiEvents(ItemGui, item, player)
     local GuiEvents = setmetatable({}, Inventory)
 
     GuiEvents.ItemGui = ItemGui
@@ -72,6 +74,7 @@ function Inventory:GuiEvents(ItemGui)
     GuiEvents.VPCamera = ItemGui.Camera
     GuiEvents.defaultcframe = GuiEvents.VPCamera.CFrame
     GuiEvents.Equipped = false
+    GuiEvents.Item = item
 
     function GuiEvents:GetGuiOpened()
 
@@ -220,24 +223,9 @@ function Inventory:GuiEvents(ItemGui)
             GuiEvents:SetEquipped(true)
             Inventory:SetEquippedItem(GuiEvents)
             print(GuiEvents.ItemGui.Name.." Just Equiped the Item. No ther Item was equipped.")
+            EquipmentModule:new(GuiEvents.Item, player)
 
         end
-    
-        --[[
-        if GuiEvents:GetEquipped() == true then
-
-            GuiEvents.Equipbutton.TextLabel.Text = "Equip"
-            GuiEvents:SetEquipped(false)
-            print("The item was unequipped")
-
-        elseif GuiEvents:GetEquipped() == false then
-
-            GuiEvents.Equipbutton.TextLabel.Text = "Unequip"
-            GuiEvents:SetEquipped(true)
-            print("The item was equipped")
-
-        end
-        --]]
     
     end)
 
@@ -271,6 +259,8 @@ function Inventory:LoadItem(item, player)
 
         for invname, info in pairs(Inventory.Items) do
 
+            print(invname)
+
             if item == invname then
     
                 Inventory:EraseDefaultItemGui(defaultitem)
@@ -294,7 +284,7 @@ function Inventory:LoadItem(item, player)
                 VP.CurrentCamera = VPCamera
                 VPCamera.Parent = NewInvItem
     
-                for index, sword in pairs(Swords) do
+                for index, sword in ipairs(Swords) do
                     
                     print(sword.Name)
                     print(item)
@@ -304,8 +294,9 @@ function Inventory:LoadItem(item, player)
                         VPSword.Position = Vector3.new(0, 0, 0)
                         VPSword.Parent = VP
                         VPCamera.CFrame = CFrame.new(Vector3.new(0,0,-7), VPSword.Position)
-                        Inventory:GuiEvents(NewInvItem)
+                        Inventory:GuiEvents(NewInvItem, item, player)
                         loop = loop + 1
+                        break
                     end
     
                 end
@@ -349,7 +340,7 @@ function Inventory:LoadItem(item, player)
                         VPSword.Position = Vector3.new(0, 0, 0)
                         VPSword.Parent = VP
                         VPCamera.CFrame = CFrame.new(Vector3.new(0,0,-7), VPSword.Position)
-                        Inventory:GuiEvents(NewInvItem)
+                        Inventory:GuiEvents(NewInvItem, item, player)
                         loop = loop + 1
                     end
     

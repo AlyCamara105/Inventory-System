@@ -20,7 +20,7 @@ function InventoryController:Start()
         local Inventory = InventoryScreen["Overall Frame"].Inventoryframe.Inventory
         local defaultitem = Inventory.Itemframe
         
-        for index, item in pairs(inventory) do
+        for index, item in ipairs(inventory) do
 
             InventoryModule:LoadItem(item, player)
         
