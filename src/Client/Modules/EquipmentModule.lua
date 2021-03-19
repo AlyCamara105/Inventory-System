@@ -1,18 +1,19 @@
--- Equipment Class
+-- Equipment Module
 -- Username
 -- March 18, 2021
 
 
 
-local EquipmentClass = {}
-EquipmentClass.__index = EquipmentClass
+
+local EquipmentModule = {}
+EquipmentModule.__index = EquipmentModule
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local SwordsFolder = ReplicatedStorage:WaitForChild("Swords",3)
+local SwordsFolder = ReplicatedStorage:WaitForChild("Swords",3):GetChildren()
 
-function EquipmentClass:new(item, player)
+function EquipmentModule:new(item, player)
 
-	local Equipment = setmetatable({}, EquipmentClass)
+	local Equipment = setmetatable({}, EquipmentModule)
 
 	Equipment.Name = item
 
@@ -24,6 +25,7 @@ function EquipmentClass:new(item, player)
 			SwordItem.CFrame = player.Character.CFrame:ToWorldSpace(CFrame.new(0,0,-5))
 			SwordItem.Anchored = true
 			SwordItem.Parent = player.Character
+			print("The Item has been created")
 
 		end
 
@@ -34,4 +36,4 @@ function EquipmentClass:new(item, player)
 end
 
 
-return EquipmentClass
+return EquipmentModule
