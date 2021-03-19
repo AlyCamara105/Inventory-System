@@ -19,10 +19,10 @@ function EquipmentModule:new(item, player)
 
 	for index, Swordinlist in ipairs(SwordsFolder) do
 
-		if item == Swordinlist then
+		if item == Swordinlist.Name then
 
 			local SwordItem = Swordinlist:Clone()
-			SwordItem.CFrame = player.Character.CFrame:ToWorldSpace(CFrame.new(0,0,-5))
+			SwordItem.CFrame = player.Character.HumanoidRootPart.CFrame:ToWorldSpace(CFrame.new(0,0,-5))
 			SwordItem.Anchored = true
 			SwordItem.Parent = player.Character
 			print("The Item has been created")
