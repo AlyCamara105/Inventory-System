@@ -77,6 +77,21 @@ function Inventory:Start()
         GuiEvents.defaultcframe = GuiEvents.VPCamera.CFrame
         GuiEvents.Equipped = false
         GuiEvents.Item = item
+        GuiEvents.ItemClass = nil 
+
+        function GuiEvents:EquipItem()
+
+            self.ItemClass = EquipmentModule:new(GuiEvents.Item, player)
+            print("We have called the module to create the item")
+
+        end
+
+        function GuiEvents:UnequipItem()
+
+            self.ItemClass:DeleteEquipment()
+            print("We have called the moduel to delete the item")
+
+        end
 
         function GuiEvents:GetGuiOpened()
 
@@ -202,7 +217,8 @@ function Inventory:Start()
                         GuiEvents.Equipbutton.TextLabel.Text = "Equip"
                         GuiEvents:SetEquipped(false)
                         Inventory:SetEquippedItem(nil)
-                        print(GuiEvents.ItemGui.Name.." Just Unequiped the Item.")
+                        GuiEvents:UnequipItem()
+                        print(GuiEvents.ItemGui.Name.." Just clicked the Unequiped the Item button.")
             
                     end
 
@@ -215,7 +231,8 @@ function Inventory:Start()
                     GuiEvents.Equipbutton.TextLabel.Text = "Unequip"
                     GuiEvents:SetEquipped(true)
                     Inventory:SetEquippedItem(GuiEvents)
-                    print(GuiEvents.ItemGui.Name.." Just Equiped the Item. Another Item was equipped.")
+                    OtherItem:UnequipItem()
+                    print(GuiEvents.ItemGui.Name.." Just clicked the Equiped the Item button. Another Item was equipped.")
             
                 end
 
@@ -224,8 +241,8 @@ function Inventory:Start()
                 GuiEvents.Equipbutton.TextLabel.Text = "Unequip"
                 GuiEvents:SetEquipped(true)
                 Inventory:SetEquippedItem(GuiEvents)
-                print(GuiEvents.ItemGui.Name.." Just Equiped the Item. No ther Item was equipped.")
-                EquipmentModule:new(GuiEvents.Item, player)
+                GuiEvents:EquipItem()
+                print(GuiEvents.ItemGui.Name.." Just clicekd the Equiped the Item button. No ther Item was equipped.")
 
             end
         

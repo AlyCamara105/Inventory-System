@@ -16,6 +16,7 @@ function EquipmentModule:new(item, player)
 	local Equipment = setmetatable({}, EquipmentModule)
 
 	Equipment.Name = item
+	Equipment.ItemPhysical = nil
 
 	for index, Swordinlist in ipairs(SwordsFolder) do
 
@@ -25,9 +26,17 @@ function EquipmentModule:new(item, player)
 			SwordItem.CFrame = player.Character.HumanoidRootPart.CFrame:ToWorldSpace(CFrame.new(0,0,-5))
 			SwordItem.Anchored = true
 			SwordItem.Parent = player.Character
+			self.ItemPhysical = SwordItem
 			print("The Item has been created")
 
 		end
+
+	end
+
+	function new:DeleteEquipment()
+
+		self.ItemPhysical:Delete()
+		print("We have deleted the item")
 
 	end
 
