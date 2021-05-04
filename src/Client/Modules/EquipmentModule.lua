@@ -33,9 +33,9 @@ function EquipmentModule:new(item, player)
 
 	end
 
-	function new:DeleteEquipment()
+	function EquipmentModule:DeleteEquipment()
 
-		self.ItemPhysical:Delete()
+		self.ItemPhysical:Destroy()
 		print("We have deleted the item")
 
 	end

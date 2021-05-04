@@ -8,13 +8,13 @@ local Inventory = {}
 
 function Inventory:Start()
 
-    local EquipmentModule = self.Modules.EquipmentModule
+    local EquipmentModule = self.Modules.EquipmentModule -- The equipment Module
 
     Inventory.__index = Inventory
 
     local TweenService = game:GetService("TweenService")
 
-    Inventory.Items = {
+    Inventory.Items = { 
 
         ["StarterSword"] = {
 
@@ -34,26 +34,26 @@ function Inventory:Start()
 
     }
 
-    Inventory.openedItemGui = nil
-    Inventory.EquippedItem = nil
+    Inventory.openedItemGui = nil -- The opened Item Gui for inventory (The class)
+    Inventory.EquippedItem = nil -- the equipped Item for inventory (the class)
 
-    function Inventory:GetEquippedItem()
+    function Inventory:GetEquippedItem() -- Gets the equipped item for the inventory
 
         return self.EquippedItem
 
     end
 
-    function Inventory:SetEquippedItem(EquippedItem)
+    function Inventory:SetEquippedItem(EquippedItem) -- Sets the item gui (its class) that was equipped to the inventory equipped variable
 
         self.EquippedItem = EquippedItem
 
     end
 
-    function Inventory:GetopenedItemGui()
+    function Inventory:GetopenedItemGui() -- Gets the Item Gui (its class) that is opened
         return self.openedItemGui
     end
 
-    function Inventory:SetopenedItemGui(ItemGui)
+    function Inventory:SetopenedItemGui(ItemGui) -- Sets the item gui (its class) to the variable that stores an opened item gui
         self.openedItemGui = ItemGui
         if self.openedItemGui ~= nil then
 
@@ -63,63 +63,63 @@ function Inventory:Start()
         
     end
 
-    function Inventory:GuiEvents(ItemGui, item, player)
-        local GuiEvents = setmetatable({}, Inventory)
+    function Inventory:GuiEvents(ItemGui, item, player) -- Connects all gui events in this function
+        local GuiEvents = setmetatable({}, Inventory) -- Creates a class under Inventory for the new item gui
 
-        GuiEvents.ItemGui = ItemGui
-        GuiEvents.Itemopened = false
-        GuiEvents.VP = ItemGui.ViewportFrame
-        GuiEvents.Equipbutton = ItemGui.Equip
-        GuiEvents.Deletebutton = ItemGui.Delete
-        GuiEvents.Stats = ItemGui.Stats
-        GuiEvents.StatsDamage = GuiEvents.Stats.Damage
-        GuiEvents.VPCamera = ItemGui.Camera
-        GuiEvents.defaultcframe = GuiEvents.VPCamera.CFrame
-        GuiEvents.Equipped = false
-        GuiEvents.Item = item
-        GuiEvents.ItemClass = nil 
+        GuiEvents.ItemGui = ItemGui -- The Item gui itself
+        GuiEvents.Itemopened = false -- Whether the item gui is opened or not
+        GuiEvents.VP = ItemGui.ViewportFrame -- The ViewportFrame itself
+        GuiEvents.Equipbutton = ItemGui.Equip -- The equipbutton itself
+        GuiEvents.Deletebutton = ItemGui.Delete -- The delete button itself
+        GuiEvents.Stats = ItemGui.Stats -- The Stats button itself
+        GuiEvents.StatsDamage = GuiEvents.Stats.Damage -- The damage image label itself
+        GuiEvents.VPCamera = ItemGui.Camera -- The Camera for the ViewPort itself
+        GuiEvents.defaultcframe = GuiEvents.VPCamera.CFrame -- The Cframe of the Camera
+        GuiEvents.Equipped = false -- Whether the item of the item gui was equipped or not
+        GuiEvents.Item = item -- The Category name for the item
+        GuiEvents.ItemClass = nil -- The item Class from the EquipmentModule
 
-        function GuiEvents:EquipItem()
+        function GuiEvents:EquipItem() -- This Accesses the EquipmentModule to create the actual physical item
 
             self.ItemClass = EquipmentModule:new(GuiEvents.Item, player)
             print("We have called the module to create the item")
 
         end
 
-        function GuiEvents:UnequipItem()
+        function GuiEvents:UnequipItem() -- This Accesses the EquipmentModule to delete the actual physcial item
 
             self.ItemClass:DeleteEquipment()
             print("We have called the moduel to delete the item")
 
         end
 
-        function GuiEvents:GetGuiOpened()
+        function GuiEvents:GetGuiOpened() -- Gets whether or not the item gui itself was opened (clicked)
 
             print(self.ItemGui.Name.."is opened: "..tostring(self.Itemopened))
             return self.Itemopened
 
         end
 
-        function GuiEvents:SetGuiOpened(bool)
+        function GuiEvents:SetGuiOpened(bool) -- Sets the item gui opened (clicked) to the bool value
 
             self.Itemopened = bool
             print(self.ItemGui.Name.."was changed to: "..tostring(self.Itemopened))
 
         end
 
-        function GuiEvents:GetEquipped()
+        function GuiEvents:GetEquipped() -- Checks whether the item is equipped
 
             return self.Equipped
 
         end
 
-        function GuiEvents:SetEquipped(bool)
+        function GuiEvents:SetEquipped(bool) -- Sets whether the item is equipped to the bool
 
             self.Equipped = bool
 
         end
 
-        ItemGui.MouseEnter:Connect(function()
+        ItemGui.MouseEnter:Connect(function() -- Controls when the Mouse enters the Item gui
         
             local goal = {}
             goal.CFrame = GuiEvents.VPCamera.CFrame * CFrame.Angles(0,0,math.pi)
@@ -133,7 +133,7 @@ function Inventory:Start()
         
         end)
         
-        ItemGui.MouseLeave:Connect(function()
+        ItemGui.MouseLeave:Connect(function() -- Controls when the Mouse leaves the Item gui
 
             local goal2 = {}
             goal2.CFrame = GuiEvents.defaultcframe
@@ -157,11 +157,11 @@ function Inventory:Start()
 
         end)
 
-        ItemGui.MouseButton1Click:Connect(function(input)
+        ItemGui.MouseButton1Click:Connect(function(input) -- Controls when the Item gui is clicked
 
-            if Inventory:GetopenedItemGui() ~= nil then
+            if Inventory:GetopenedItemGui() ~= nil then -- If the inventory has an open Item gui
 
-                if Inventory:GetopenedItemGui() == GuiEvents then
+                if Inventory:GetopenedItemGui() == GuiEvents then -- and the item gui's are the same
 
                     GuiEvents.Equipbutton.Visible = false
                     GuiEvents.Deletebutton.Visible = false
@@ -172,7 +172,7 @@ function Inventory:Start()
 
                     print("This gui should close")
 
-                elseif Inventory:GetopenedItemGui() ~= GuiEvents then
+                elseif Inventory:GetopenedItemGui() ~= GuiEvents then -- if it is not the same
 
                     local OtherItemGui = Inventory:GetopenedItemGui()
                     OtherItemGui.Equipbutton.Visible = false
@@ -191,7 +191,7 @@ function Inventory:Start()
 
                 end 
 
-            elseif Inventory:GetopenedItemGui() == nil then
+            elseif Inventory:GetopenedItemGui() == nil then -- Elseif the Inventory doesn't have an opened Item Gui
 
                 Inventory:SetopenedItemGui(GuiEvents)
                 
@@ -206,13 +206,13 @@ function Inventory:Start()
         
         end)
 
-        GuiEvents.Equipbutton.MouseButton1Click:Connect(function()
+        GuiEvents.Equipbutton.MouseButton1Click:Connect(function() -- Controls when the equip button is clicked
 
-            if Inventory:GetEquippedItem() ~= nil then
+            if Inventory:GetEquippedItem() ~= nil then -- If an Item is equipped on the inventory
 
-                if Inventory:GetEquippedItem() == GuiEvents then
+                if Inventory:GetEquippedItem() == GuiEvents then -- and if it is this item gui
 
-                    if GuiEvents:GetEquipped() == true then
+                    if GuiEvents:GetEquipped() == true then -- and the gui is equipped (Not Needed?)
 
                         GuiEvents.Equipbutton.TextLabel.Text = "Equip"
                         GuiEvents:SetEquipped(false)
@@ -222,7 +222,7 @@ function Inventory:Start()
             
                     end
 
-                elseif Inventory:GetEquippedItem() ~= GuiEvents then
+                elseif Inventory:GetEquippedItem() ~= GuiEvents then -- if it is not this item Gui
 
                     local OtherItem = Inventory:GetEquippedItem()
                     OtherItem:SetEquipped(false)
@@ -236,7 +236,7 @@ function Inventory:Start()
             
                 end
 
-            elseif Inventory:GetEquippedItem() == nil then
+            elseif Inventory:GetEquippedItem() == nil then -- If not Item is equipped on the inventory
 
                 GuiEvents.Equipbutton.TextLabel.Text = "Unequip"
                 GuiEvents:SetEquipped(true)
@@ -252,8 +252,8 @@ function Inventory:Start()
     end
     local loop = 1
 
-    Inventory.GuiIsNil = false
-    Inventory.DefaultGui = nil
+    Inventory.GuiIsNil = false -- Variable for moving the default item gui
+    Inventory.DefaultGui = nil -- The default item gui
 
     function Inventory:EraseDefaultItemGui(DefaulItemGui)
 
