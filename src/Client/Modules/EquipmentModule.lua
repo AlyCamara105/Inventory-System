@@ -22,6 +22,8 @@ function EquipmentModule:new(item, player)
 
 		if item == Swordinlist.Name then
 
+			self.Services.EquipmentControlService:LoadAsseccory(Equipment.Name)
+
 			local SwordItem = Swordinlist:Clone()
 			SwordItem.CFrame = player.Character.HumanoidRootPart.CFrame:ToWorldSpace(CFrame.new(0,0,-5))
 			SwordItem.Anchored = true

@@ -309,10 +309,10 @@ function Inventory:Start()
                         print(item)
                         if item == sword.Name then
         
-                            local VPSword = sword:Clone()
+                            --[[local VPSword = sword:Clone()
                             VPSword.Position = Vector3.new(0, 0, 0)
                             VPSword.Parent = VP
-                            VPCamera.CFrame = CFrame.new(Vector3.new(0,0,-7), VPSword.Position)
+                            VPCamera.CFrame = CFrame.new(Vector3.new(0,0,-7), VPSword.Position)]]
                             Inventory:GuiEvents(NewInvItem, item, player)
                             loop = loop + 1
                             break
