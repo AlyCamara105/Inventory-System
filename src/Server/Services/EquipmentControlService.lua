@@ -7,9 +7,9 @@
 local EquipmentControlService = {Client = {}}
 
 
-function EquipmentControlService.Client:LoadAsseccory(AsseccoryName)
+function EquipmentControlService.Client:LoadAsseccory(player, AsseccoryName)
 
-    print("The server should put the asseccory on the player...")
+    -- Make this loop through the ReplicatedStorage Swords that matches AsseccoryName
 
 end
 
